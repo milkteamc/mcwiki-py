@@ -1,5 +1,10 @@
+extern crate pyo3;
+extern crate regex;
+
 use pyo3::prelude::*;
 use regex::Regex;
+
+mod text_parser;
 
 #[pyclass]
 struct WikiPage {
