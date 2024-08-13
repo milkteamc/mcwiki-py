@@ -36,4 +36,4 @@ text = """{{Infobox block
 {{IN|Java}}, cocoa beans are only obtained through the natural generation of cocoa pods, while {{in|Bedrock}}, they can also be found in bonus chests, from [[fishing]] inside the jungle, bamboo jungle and sparse jungle biomes and during a [[trading]] with a [[wandering trader]]."""
 
 page = mcwiki_py.WikiPage(text)
-print(page.parse()[-2].level)
+print(page.parse()[-2])
