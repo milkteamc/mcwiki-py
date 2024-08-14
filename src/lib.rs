@@ -4,7 +4,7 @@ extern crate regex;
 use pyo3::prelude::*;
 use regex::Regex;
 
-mod text_parser;
+mod text_meta;
 
 #[pyclass]
 struct WikiPage {
@@ -85,5 +85,6 @@ impl WikiPage {
 fn mcwiki_py(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<WikiPage>()?;
     m.add_class::<Node>()?;
+    m.add_function(wrap_pyfunction!(text_meta::get_text_meta, m)?)?;
     Ok(())
 }

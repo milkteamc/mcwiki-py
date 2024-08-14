@@ -17,12 +17,15 @@ impl TextMeta {
     }
 }
 
-pub fn parse_text(text: String) -> Vec<TextMeta> {
+#[pyfunction]
+pub fn get_text_meta(text: String) -> PyResult<Vec<TextMeta>> {
     let links_re = Regex::new(r"\[\[.+\]\]").unwrap();
     let mut meta_items: Vec<TextMeta> = vec![];
 
-    links_re.captures_iter(text.as_str()).for_each(|c| {
-        let t = c.get(0);
+    let captures = links_re.captures_iter(text.as_str());
+
+    for cap in captures {
+        let t = cap.get(0);
         match t {
             Some(m) => {
                 let splits = m
@@ -35,9 +38,13 @@ pub fn parse_text(text: String) -> Vec<TextMeta> {
                     attrs: splits[0..splits.len() - 1].into(),
                 });
             }
-            None => panic!("(links_re) unexpected: None"),
+            None => {
+                return Err(pyo3::exceptions::PyRuntimeError::new_err(
+                    "failed to capture links meta (occurred in get_text_meta, 'for cap in captures')",
+                ))
+            }
         }
-    });
+    }
 
-    meta_items
+    Ok(meta_items)
 }
