@@ -37,3 +37,7 @@ text = """{{Infobox block
 
 page = mcwiki_py.WikiPage(text)
 print(page.parse()[-2])
+
+for item in page.parse():
+    if item.name == "text":
+        print(item)

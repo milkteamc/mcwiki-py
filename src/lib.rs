@@ -15,16 +15,23 @@ struct WikiPage {
 #[pyclass]
 enum Node {
     Title { level: u8, text: String },
-    Text(String),
+    Text(text_meta::WikiText),
 }
 
 #[pymethods]
 impl Node {
+    #[getter]
+    fn name(&self) -> &'static str {
+        match self {
+            Self::Title { .. } => "title",
+            Self::Text(_) => "text",
+        }
+    }
+
     fn __repr__(&self) -> String {
         match self {
             Self::Title { level, text } => format!("Node::Title(level={}, text={:?})", level, text),
-
-            Self::Text(_) => "Node::Text()".into(),
+            Self::Text(meta) => format!("Node::Text({})", meta.__repr__()),
         }
     }
 }
@@ -71,7 +78,7 @@ impl WikiPage {
                     None => continue,
                 }
             } else {
-                nodes.push(Node::Text(line.into()));
+                nodes.push(Node::Text(text_meta::WikiText::new(line.to_owned())));
             }
 
             i += 1;
@@ -85,6 +92,5 @@ impl WikiPage {
 fn mcwiki_py(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<WikiPage>()?;
     m.add_class::<Node>()?;
-    m.add_function(wrap_pyfunction!(text_meta::get_text_meta, m)?)?;
     Ok(())
 }

@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Any, Literal, Union, List
 
 class WikiPage:
     """Represents the wiki page."""
@@ -6,11 +6,19 @@ class WikiPage:
     text: str
 
     def __init__(self, text: str): ...
-    def parse(self) -> List[Union["Node_Title", "Node_Text"]]: ...
+    def parse(self) -> List[Union["Node.Title", "Node.Text"]]: ...
 
-class Node_Title:
-    level: int
-    text: str
+class Node:
+    class Base:
+        name: Any
 
-class Node_Text:
-    text: str
+    class Title(Node.Base):
+        name: Literal["title"]
+        level: int
+        text: str
+
+    class Text(Node.Base):
+        name: Literal["text"]
+        text: str
+
+        def get_meta(self) -> List: ...

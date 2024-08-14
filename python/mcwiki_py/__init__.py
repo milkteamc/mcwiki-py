@@ -1,3 +1,3 @@
-from .mcwiki_py import WikiPage, Node
+from .mcwiki_py import WikiPage
 
-__all__ = ["WikiPage", "Node"]
+__all__ = ["WikiPage"]
